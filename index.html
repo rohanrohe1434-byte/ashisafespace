@@ -5,195 +5,245 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Ashi's Space</title>
 <style>
- body {
-   margin: 0;
-   padding: 0;
-   font-family: Arial, sans-serif;
-   background: #fafafa;
-   color: #333;
- }
- header {
-   padding: 20px;
-   text-align: center;
-   font-size: 24px;
- }
- .corner-message {
-   position: fixed;
-   bottom: 10px;
-   right: 10px;
-   font-size: 14px;
-   opacity: 0.7;
- }
- .section {
-   padding: 20px;
-   border-bottom: 1px solid #eee;
- }
- .feeling-buttons button {
-   margin: 5px;
-   padding: 10px 15px;
-   border: none;
-   border-radius: 6px;
-   cursor: pointer;
-   background: #e6e6e6;
- }
- textarea {
-   width: 100%;
-   height: 80px;
-   margin-top: 10px;
- }
- .grounding, .affirmations {
-   margin-top: 10px;
- }
- .affirmations button {
-   padding: 8px 12px;
-   border: none;
-   border-radius: 6px;
-   background: #e6e6e6;
-   cursor: pointer;
- }
- .notes textarea {
-   height: 150px;
- }
- .emergency button {
-   padding: 12px 20px;
-   border: none;
-   border-radius: 6px;
-   background: #ff6666;
-   color: white;
-   cursor: pointer;
- }
- .background-quotes {
-   position: fixed;
-   top: 0;
-   left: 0;
-   width: 100%;
-   height: 100%;
-   z-index: -1;
-   opacity: 0.08;
-   font-size: 40px;
-   white-space: nowrap;
-   animation: scrollQuotes 20s linear infinite;
- }
- @keyframes scrollQuotes {
-   0% { transform: translateX(100%); }
-   100% { transform: translateX(-100%); }
- }
+:root {
+  --bg-color: #fafafa;
+  --text-color: #333;
+  --section-bg: #fff;
+  --button-bg: #e6e6e6;
+  --button-text: #333;
+  --emergency-bg: #ff6666;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1e1e1e;
+  --text-color: #f0f0f0;
+  --section-bg: #2a2a2a;
+  --button-bg: #444;
+  --button-text: #f0f0f0;
+  --emergency-bg: #ff4d4d;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+}
+
+header {
+  padding: 20px;
+  text-align: center;
+  font-size: 24px;
+}
+
+#themeToggle {
+  margin-left: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.section {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  background: var(--section-bg);
+  transition: background 0.3s, color 0.3s;
+}
+
+.feeling-buttons button,
+.affirmations button {
+  margin: 5px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: var(--button-bg);
+  color: var(--button-text);
+}
+
+textarea {
+  width: 100%;
+  height: 80px;
+  margin-top: 10px;
+}
+
+.notes textarea {
+  height: 150px;
+}
+
+.emergency button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  background: var(--emergency-bg);
+  color: white;
+  cursor: pointer;
+}
+
+.background-quotes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.08;
+  font-size: 40px;
+  white-space: nowrap;
+  animation: scrollQuotes 20s linear infinite;
+}
+
+@keyframes scrollQuotes {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+#breathCircle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #d9eaff;
+  margin: auto;
+  animation: breathe 6s infinite;
+}
+
+@keyframes breathe {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
 </style>
 </head>
 <body>
-<header>Ashi's Calm Space 🎨🐰</header>
+<header>
+  Ashi's Calm Space 🎨🐰
+  <button id="themeToggle">🌙</button>
+</header>
+
 <div class="background-quotes" id="quotes"></div>
 
 <div class="section" id="checkin">
- <h3>How are you feeling today? 🎨</h3>
- <div class="feeling-buttons">
-   <button onclick="selectFeeling('tired')">Tired</button>
-   <button onclick="selectFeeling('sad')">Sad</button>
-   <button onclick="selectFeeling('angry')">Angry</button>
-   <button onclick="selectFeeling('overwhelmed')">Overwhelmed</button>
-   <button onclick="selectFeeling('okay')">Okay</button>
- </div>
- <textarea id="reason" placeholder="Write the reason if you want to..."></textarea>
+  <h3>How are you feeling today? 🎨</h3>
+  <div class="feeling-buttons">
+    <button onclick="selectFeeling('tired')">Tired</button>
+    <button onclick="selectFeeling('sad')">Sad</button>
+    <button onclick="selectFeeling('angry')">Angry</button>
+    <button onclick="selectFeeling('overwhelmed')">Overwhelmed</button>
+    <button onclick="selectFeeling('okay')">Okay</button>
+  </div>
+  <textarea id="reason" placeholder="Write the reason if you want to..."></textarea>
 </div>
 
 <div class="section" id="calendar">
- <h3>Daily Calendar Check‑In 🐰</h3>
- <input type="date" id="datePicker" />
+  <h3>Daily Calendar Check‑In 🐰</h3>
+  <input type="date" id="datePicker" />
 </div>
 
 <div class="section grounding">
- <h3>5‑4‑3‑2‑1 Grounding Exercise </h3>
- <ul>
-   <li>5 things you can see</li>
-   <li>4 things you can touch</li>
-   <li>3 things you can hear</li>
-   <li>2 things you can smell</li>
-   <li>1 thing you can taste</li>
- </ul>
+  <h3>5‑4‑3‑2‑1 Grounding Exercise </h3>
+  <ul>
+    <li>5 things you can see</li>
+    <li>4 things you can touch</li>
+    <li>3 things you can hear</li>
+    <li>2 things you can smell</li>
+    <li>1 thing you can taste</li>
+  </ul>
 </div>
 
 <div class="section" id="breathing">
- <h3>Breathing Animation </h3>
- <div id="breathCircle" style="width:120px;height:120px;border-radius:50%;background:#d9eaff;margin:auto;animation: breathe 6s infinite;"></div>
- <style>
- @keyframes breathe {
-   0% { transform: scale(1); }
-   50% { transform: scale(1.3); }
-   100% { transform: scale(1); }
- }
- </style>
+  <h3>Breathing Animation </h3>
+  <div id="breathCircle"></div>
 </div>
 
 <div class="section affirmations">
- <h3>Affirmations 🎨</h3>
- <p id="affirmText"></p>
- <button onclick="nextAffirmation()">Next</button>
+  <h3>Affirmations 🎨</h3>
+  <p id="affirmText"></p>
+  <button onclick="nextAffirmation()">Next</button>
 </div>
 
 <div class="section notes">
- <h3>Your Private Notes 🐰</h3>
- <textarea id="privateNotes"></textarea>
- <button onclick="saveNotes()">Save</button>
+  <h3>Your Private Notes 🐰</h3>
+  <textarea id="privateNotes"></textarea>
+  <button onclick="saveNotes()">Save</button>
 </div>
 
 <div class="section" id="notYourFault">
- <h3>You Are Not the Problem </h3>
- <p>Abuse is not your fault.</p>
- <p>Love doesn’t require suffering.</p>
- <p>Trust issues come from being hurt, not from being "wrong".</p>
+  <h3>You Are Not the Problem </h3>
+  <p>Abuse is not your fault.</p>
+  <p>Love doesn’t require suffering.</p>
+  <p>Trust issues come from being hurt, not from being "wrong".</p>
 </div>
 
 <div class="section" id="supportMap">
- <h3>Support Map </h3>
- <ul>
-   <li>You deserve respect.</li>
-   <li>You don’t have to answer toxic messages right now.</li>
-   <li>Your feelings are valid.</li>
- </ul>
+  <h3>Support Map </h3>
+  <ul>
+    <li>You deserve respect.</li>
+    <li>You don’t have to answer toxic messages right now.</li>
+    <li>Your feelings are valid.</li>
+  </ul>
 </div>
 
 <div class="section emergency">
- <h3>Emergency Support</h3>
- <button onclick="location.href='tel:7997664747'">Contact</button>
+  <h3>Emergency Support</h3>
+  <button onclick="window.location.href='tel:7997664747'">Contact</button>
 </div>
 
 <div class="corner-message">You’re not alone in this world. 🎨🐰</div>
 
 <script>
 const quotes = [
- "You are enough.",
- "One step at a time.",
- "You deserve gentleness.",
- "You are stronger than you think.",
- "You matter."
+  "You are enough.",
+  "One step at a time.",
+  "You deserve gentleness.",
+  "You are stronger than you think.",
+  "You matter."
 ];
 
 function randomQuote() {
- const q = quotes[Math.floor(Math.random() * quotes.length)];
- document.getElementById('quotes').innerText = q.repeat(20);
+  const q = quotes[Math.floor(Math.random() * quotes.length)];
+  document.getElementById('quotes').innerText = q.repeat(20);
 }
 setInterval(randomQuote, 3000);
 randomQuote();
 
 let affirmList = [
- "You are doing your best.",
- "You deserve peace.",
- "You are worthy of care.",
- "Your feelings make sense.",
- "You are allowed to rest."
+  "You are doing your best.",
+  "You deserve peace.",
+  "You are worthy of care.",
+  "Your feelings make sense.",
+  "You are allowed to rest."
 ];
 let affirmIndex = 0;
 function nextAffirmation() {
- document.getElementById('affirmText').innerText = affirmList[affirmIndex];
- affirmIndex = (affirmIndex + 1) % affirmList.length;
+  document.getElementById('affirmText').innerText = affirmList[affirmIndex];
+  affirmIndex = (affirmIndex + 1) % affirmList.length;
 }
 nextAffirmation();
 
 function saveNotes() {
- localStorage.setItem('ashi_private_notes', document.getElementById('privateNotes').value);
+  localStorage.setItem('ashi_private_notes', document.getElementById('privateNotes').value);
 }
 
 document.getElementById('privateNotes').value = localStorage.getItem('ashi_private_notes') || "";
+
+// Theme toggle
+const themeToggle = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('ashi_theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+updateToggleIcon(savedTheme);
+
+themeToggle.addEventListener('click', () => {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('ashi_theme', newTheme);
+  updateToggleIcon(newTheme);
+});
+
+function updateToggleIcon(theme) {
+  themeToggle.innerText = theme === 'light' ? '🌙' : '☀️';
+}
 </script>
 </body>
 </html>
